@@ -31,6 +31,6 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return response('delete success!');
+        return response()->json('delete success!');
     }
 }
