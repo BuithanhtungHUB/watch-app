@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::orDerBy('id', 'DESC')->paginate(5);
+        $users = User::with('role')->orDerBy('id', 'DESC')->paginate(5);
         return response()->json($users);
     }
 
