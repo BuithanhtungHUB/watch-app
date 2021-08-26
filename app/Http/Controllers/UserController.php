@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth:api');
+//        $this->middleware('auth:api');
     }
 
     public function index()
@@ -19,11 +19,7 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    public function create()
-    {
-        $role = Role::all();
-        return response()->json($role);
-    }
+
 
 
     public function store(User $user, Request  $request)
