@@ -22,15 +22,37 @@ class UserController extends Controller
 
 
 
-    public function store(User $user, Request  $request)
+    public function create(User $user, Request  $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|between:2,100',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|confirmed|min:6',
+            'role' => 'required',
+        ]);
 
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson());
+        }
+
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
+
+        return response()->json([
+            'message' => 'User successfully registered'
+        ]);
     }
 
     public function destroy($id)
     {
         $user = User::find($id);
         $user->delete();
-        return response()->json('delete success!');
+        $data = [
+        'message' => 'delete success!',
+            'users' => User::with('role')->orderBy('id', 'DESC')->get()
+        ];
+        return response()->json($data);
     }
 }
