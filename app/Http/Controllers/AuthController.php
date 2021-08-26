@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -29,11 +30,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors());
         }
 
         if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized']);
         }
 
         return $this->createNewToken($token);
@@ -52,7 +53,7 @@ class AuthController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors()->toJson());
         }
 
         $user = User::create(array_merge(
@@ -63,7 +64,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user
-        ], 201);
+        ]);
     }
 
 
@@ -74,7 +75,7 @@ class AuthController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors()->toJson());
         }
         $userId = auth()->user()->id;
 

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +19,25 @@ use App\Http\Controllers\AuthController;
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
-Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
-    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::post('/refresh', [AuthController::class, 'refresh'])->name('auth.refresh');
-    Route::get('/user-profile', [AuthController::class, 'userProfile'])->name('auth.userProfile');
-    Route::post('/change-password', [AuthController::class, 'changePassword'])->name('auth.changePassword');
+Route::middleware(['api'])->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+        Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+        Route::post('/refresh', [AuthController::class, 'refresh'])->name('auth.refresh');
+        Route::get('/user-profile', [AuthController::class, 'userProfile'])->name('auth.userProfile');
+        Route::post('/change-password', [AuthController::class, 'changePassword'])->name('auth.changePassword');
+    });
+
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.list');
+    });
 });
+//Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
+//    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+//    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+//    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+//    Route::post('/refresh', [AuthController::class, 'refresh'])->name('auth.refresh');
+//    Route::get('/user-profile', [AuthController::class, 'userProfile'])->name('auth.userProfile');
+//    Route::post('/change-password', [AuthController::class, 'changePassword'])->name('auth.changePassword');
+//});
